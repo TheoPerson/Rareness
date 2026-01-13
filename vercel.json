@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "public": true,
   "cleanUrls": true,
   "rewrites": [
-    {
-      "source": "/web/(.*)",
-      "destination": "/$1"
-    }
+    { "source": "/", "destination": "/web/index.html" },
+    { "source": "/src/styles/(.*)", "destination": "/web/src/styles/$1" },
+    { "source": "/app.js", "destination": "/web/app.js" },
+    { "source": "/data/(.*)", "destination": "/data/$1" },
+    { "source": "/assets/(.*)", "destination": "/assets/$1" }
   ],
   "headers": [
     {
