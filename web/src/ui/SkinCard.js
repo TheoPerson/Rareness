@@ -6,7 +6,7 @@ export class SkinCard {
         // Pre-bind for performance if reusing listeners, though individual card listeners are easier for now.
     }
 
-    createCardElement(skin, clickCallback, toggleFavoriteCallback) {
+    createCardElement(skin) {
         // Main Container Construction (Optimized)
 
         // Favorite Button

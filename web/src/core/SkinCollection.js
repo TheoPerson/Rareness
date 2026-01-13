@@ -66,7 +66,6 @@ export class SkinCollection {
     const themeToggle = document.getElementById("themeToggle");
     if(themeToggle) {
         themeToggle.addEventListener("click", () => {
-            const isDark = document.body.dataset.theme === 'dark'; // Assuming default calls for light/dark
             // Actually, CSS variables are set on :root. We might need a class.
             // Let's toggle class 'light-mode' on body if default is dark, or vice versa.
             document.body.classList.toggle("light-theme");
