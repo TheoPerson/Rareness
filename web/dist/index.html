@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rareness - Ultimate League of Legends Skin Collection</title>
+    <link rel="stylesheet" href="/styles/main.css">
+    
+    <!-- Performance Monitoring (Audit Injection) -->
+    <script>
+      (function () {
+        window.auditMetrics = {
+          lcp: 0,
+          cls: 0,
+          longTasks: 0,
+          longTaskTotalDuration: 0,
+        };
+
+        // LCP
+        new PerformanceObserver((entryList) => {
+          for (const entry of entryList.getEntries()) {
+            if (entry.startTime > window.auditMetrics.lcp) {
+              window.auditMetrics.lcp = entry.startTime;
+              console.log(
+                "[Audit] LCP Candidate:",
+                Math.round(entry.startTime),
+                "ms"
+              );
+            }
+          }
+        }).observe({ type: "largest-contentful-paint", buffered: true });
+
+        // CLS
+        new PerformanceObserver((entryList) => {
+          for (const entry of entryList.getEntries()) {
+            if (!entry.hadRecentInput) {
+              window.auditMetrics.cls += entry.value;
+              console.log(
+                "[Audit] CLS Update:",
+                window.auditMetrics.cls.toFixed(4)
+              );
+            }
+          }
+        }).observe({ type: "layout-shift", buffered: true });
+
+        // Long Tasks
+        new PerformanceObserver((entryList) => {
+          for (const entry of entryList.getEntries()) {
+            window.auditMetrics.longTasks++;
+            window.auditMetrics.longTaskTotalDuration += entry.duration;
+            console.log(`[Audit] Long Task: ${Math.round(entry.duration)}ms`);
+          }
+        }).observe({ type: "longtask", buffered: true });
+
+        // DOM Content Loaded & Load
+        window.addEventListener("load", () => {
+          setTimeout(() => {
+            const perf = performance.getEntriesByType("navigation")[0];
+            console.log(
+              "[Audit] DOMContentLoaded:",
+              Math.round(perf.domContentLoadedEventEnd),
+              "ms"
+            );
+            console.log(
+              "[Audit] Load Complete:",
+              Math.round(perf.loadEventEnd),
+              "ms"
+            );
+            console.log(
+              "[Audit] DOM Nodes:",
+              document.getElementsByTagName("*").length
+            );
+          }, 0);
+        });
+      })();
+    </script>
+
+    <!-- SEO & Metadata -->
+    <meta
+      name="description"
+      content="Explore the complete collection of League of Legends skins. View high-quality splash art, prices, release dates, and 3D effects for every champion."
+    />
+    <meta
+      name="keywords"
+      content="League of Legends, LoL, Skins, Collection, Viewer, Riot Games, Skin Spotlight, Rare Skins, Prestige Skins"
+    />
+    <meta name="author" content="Rareness" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://rareness.app/" />
+    <meta
+      property="og:title"
+      content="Rareness - Ultimate League of Legends Skin Collection"
+    />
+    <meta
+      property="og:description"
+      content="Browse over 1000+ League of Legends skins with exclusivity badges, prices, and history."
+    />
+    <meta
+      property="og:image"
+      content="https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-splashes/157/38000.jpg"
+    />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://rareness.app/" />
+    <meta property="twitter:title" content="Rareness - LoL Skin Collection" />
+    <meta
+      property="twitter:description"
+      content="Browse every League of Legends skin ever released."
+    />
+    <meta
+      property="twitter:image"
+      content="https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-splashes/157/38000.jpg"
+    />
+
+    <!-- Security (Strict CSP - Allow communitydragon images and youtube) -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://raw.communitydragon.org https://ddragon.leagueoflegends.com; connect-src 'self' https://raw.communitydragon.org;"
+    />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icons -->
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/1.png"
+      style="border-radius: 50%"
+    />
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Rareness",
+        "url": "https://rareness.app",
+        "description": "Visual collector for League of Legends skins.",
+        "applicationCategory": "EntertainmentApplication",
+        "operatingSystem": "Web",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    </script>
+    <script type="module" crossorigin src="/assets/index-Cjjs7tP1.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BP1obikC.css">
+  </head>
+  <body>
+    <div id="app">
+      <!-- Main Application Logic Injected Here -->
+      <!-- Fallback for no-js -->
+      <noscript>
+        <div
+          style="
+            padding: 2rem;
+            color: #fff;
+            background: #000;
+            text-align: center;
+          "
+        >
+          This application requires JavaScript to function.
+        </div>
+      </noscript>
+
+      <!-- Header -->
+      <header class="header">
+        <div class="container header-content">
+          <a class="logo" onclick="location.reload()">
+            <img
+              src="https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/1.png"
+              alt="Logo"
+              width="40"
+              height="40"
+              style="border-radius: 50%"
+            />
+            <h1>RARENESS</h1>
+          </a>
+
+          <nav class="header-nav">
+            <button id="homeBtn" class="nav-btn active">Home</button>
+            <button id="browseBtn" class="nav-btn">Collection</button>
+            <button
+              id="favoritesBtn"
+              class="nav-btn favorites-btn"
+              aria-label="View Favorites"
+            >
+              <span>Favorites</span>
+              <span id="favoritesCount" class="badge">0</span>
+            </button>
+            <!-- Theme Toggle -->
+            <button
+              id="themeToggle"
+              class="nav-btn theme-toggle"
+              aria-label="Toggle Dark/Light Mode"
+            >
+              <svg
+                class="sun-icon"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              </svg>
+              <svg
+                class="moon-icon"
+                style="display: none"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+                ></path>
+              </svg>
+            </button>
+            <button
+              id="adminTrigger"
+              class="admin-trigger-header"
+              aria-label="Admin Dashboard"
+              title="Admin Stats"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14v2H5z" />
+              </svg>
+            </button>
+          </nav>
+        </div>
+      </header>
+
+      <!-- Hero Section Structure (Static for fastest LCP) -->
+      <section id="heroSection" class="hero-section">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+          <span class="hero-badge">Curated Collection</span>
+          <h1 class="hero-title">
+            Experience <span class="highlight">Rareness</span>
+          </h1>
+          <p class="hero-subtitle">
+            The ultimate visual catalog of League of Legends cosmetics. Browse,
+            filter, and discover over 1,600 skins in premium detail.
+          </p>
+          <div class="hero-actions">
+            <button id="heroBrowseBtn" class="cta-button">
+              Start Browsing
+            </button>
+          </div>
+          <!-- Interactive Stats Grid injected by JS -->
+          <div id="heroStatsGrid" class="hero-stats-grid">
+            <div class="stat-card" id="statMostExpensive">
+              <div class="stat-icon footer-branding"></div>
+              <div class="stat-info">
+                <div class="stat-value">Loading...</div>
+                <div class="stat-label">Most Exclusive</div>
+              </div>
+            </div>
+            <div class="stat-card" id="statCheapest">
+              <div class="stat-icon stat-icon-champs"></div>
+              <div class="stat-info">
+                <div class="stat-value">Loading...</div>
+                <div class="stat-label">Best Value</div>
+              </div>
+            </div>
+            <div class="stat-card" id="statLatest">
+              <div class="stat-icon stat-icon-total"></div>
+              <div class="stat-info">
+                <div class="stat-value">Loading...</div>
+                <div class="stat-label">Latest Drop</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Browse Section -->
+      <section id="browseSection" class="main container" style="display: none">
+        <!-- Sticky Controls -->
+        <div class="sticky-controls">
+          <div class="controls">
+            <div class="search-wrapper">
+              <svg
+                class="search-icon"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input
+                type="text"
+                id="searchInput"
+                class="search-input"
+                placeholder="Search champions, skins (e.g. 'Spirit Blossom')..."
+                aria-label="Search Skins"
+              />
+              <button
+                id="clearSearch"
+                class="clear-btn"
+                style="display: none"
+                aria-label="Clear Search"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div class="filters">
+              <button class="filter-chip active" data-filter="all">
+                All Skins
+              </button>
+              <button class="filter-chip" data-filter="favorites">
+                Favorites
+              </button>
+              <button class="filter-chip" data-filter="chromas">Chromas</button>
+              <button class="filter-chip" data-filter="prestige">
+                Prestige
+              </button>
+              <button class="filter-chip" data-filter="esports">Esports</button>
+
+              <div style="flex-grow: 1"></div>
+
+              <select
+                id="championFilter"
+                class="champion-select"
+                aria-label="Filter by Champion"
+              >
+                <option value="">All Champions</option>
+              </select>
+
+              <select
+                id="sortControl"
+                class="champion-select sort-select"
+                aria-label="Sort Skins"
+              >
+                <option value="default">Default Sort</option>
+                <option value="date-newest">Release Date (Newest)</option>
+                <option value="date-oldest">Release Date (Oldest)</option>
+                <option value="price-high">Price (High to Low)</option>
+                <option value="price-low">Price (Low to High)</option>
+                <option value="name-az">Name (A-Z)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grid -->
+        <div id="loadingState" class="loading-state">
+          <div class="spinner"></div>
+          <h2>Loading Collection...</h2>
+          <div class="loader-stats">Fetching data from Riot Servers...</div>
+        </div>
+
+        <div id="emptyState" class="empty-state" style="display: none">
+          <h2>No skins found</h2>
+          <p>Try adjusting your search or filters.</p>
+        </div>
+
+        <div id="skinsGrid" class="skins-grid">
+          <!-- Skins Injected Here -->
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="footer-content">
+          <div class="footer-branding">
+            <h3>Rareness</h3>
+            <p>
+              The definitive visual database for League of Legends collectibles.
+              Documenting art, rarity, and history since 2026.
+            </p>
+          </div>
+
+          <div class="footer-column">
+            <h4>Collection</h4>
+            <a href="#" onclick="document.getElementById('browseBtn').click()"
+              >Browse All</a
+            >
+            <a href="#" onclick="document.getElementById('browseBtn').click()"
+              >New Arrivals</a
+            >
+            <a href="#" onclick="document.getElementById('browseBtn').click()"
+              >Sales</a
+            >
+          </div>
+
+          <div class="footer-column">
+            <h4>Resources</h4>
+            <a
+              href="https://www.leagueoflegends.com"
+              target="_blank"
+              rel="noopener"
+              >Official Game</a
+            >
+            <a
+              href="https://raw.communitydragon.org"
+              target="_blank"
+              rel="noopener"
+              >Community Dragon</a
+            >
+            <a href="#" onclick="alert('API Docs coming soon')">API Docs</a>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          &copy; 2026 Rareness Project. Not endorsed by Riot Games.
+        </div>
+      </footer>
+    </div>
+
+    <!-- Modals -->
+    <div
+      id="skinModal"
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-hidden="true"
+    >
+      <div class="modal-overlay"></div>
+      <div class="modal-content">
+        <button
+          id="modalFavorite"
+          class="modal-favorite"
+          title="Toggle Favorite"
+          aria-label="Toggle Favorite"
+        >
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+            />
+          </svg>
+        </button>
+        <button id="closeModal" class="modal-close" aria-label="Close Modal">
+          ✕
+        </button>
+        <div class="modal-body">
+          <div class="modal-image-wrapper">
+            <img
+              id="modalImage"
+              class="modal-image"
+              src=""
+              alt="Skin Splash Art"
+            />
+          </div>
+          <div class="modal-info">
+            <div class="modal-header">
+              <h2 id="modalTitle">Skin Title</h2>
+              <div id="modalBadges" class="modal-badges"></div>
+            </div>
+
+            <div class="modal-details">
+              <div class="detail-item">
+                <span class="detail-label">Champion</span>
+                <span id="modalChampion" class="detail-value"
+                  >Champion Name</span
+                >
+              </div>
+              <div class="detail-item" id="modalPriceRow">
+                <span class="detail-label">Price</span>
+                <span id="modalPrice" class="detail-value">1350 RP</span>
+              </div>
+              <div class="detail-item" id="modalReleaseDateRow">
+                <span class="detail-label">Released</span>
+                <span id="modalReleaseDate" class="detail-value"
+                  >Loading...</span
+                >
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">ID</span>
+                <span id="modalSkinId" class="detail-value">0000</span>
+              </div>
+              <!-- Hidden Data -->
+              <span id="modalSkinNum" style="display: none"></span>
+            </div>
+
+            <div class="modal-actions">
+              <a
+                id="modalYouTubeLink"
+                href="#"
+                target="_blank"
+                rel="noopener"
+                class="action-btn youtube-btn"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"
+                  />
+                </svg>
+                Watch Spotlight
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Modal -->
+    <div id="adminModal" class="modal" style="display: none; z-index: 2000">
+      <div class="modal-overlay"></div>
+      <div class="modal-content" style="max-width: 500px; padding: 2rem">
+        <button
+          id="closeAdmin"
+          class="modal-close"
+          style="top: 10px; right: 10px"
+        >
+          ✕
+        </button>
+        <h2 style="color: var(--primary); margin-bottom: 1rem">
+          Performance Stats
+        </h2>
+        <div class="admin-grid" style="display: grid; gap: 1rem; color: #fff">
+          <div>
+            Memory:
+            <span
+              id="admin_memory"
+              style="font-weight: bold; color: var(--accent-blue)"
+              >...</span
+            >
+          </div>
+          <div>
+            DOM Nodes: <span id="admin_dom" style="font-weight: bold">...</span>
+          </div>
+          <div>
+            Assets (Img):
+            <span id="admin_assets" style="font-weight: bold">...</span>
+          </div>
+          <div>
+            TTI: <span id="admin_tti" style="font-weight: bold">0ms</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>

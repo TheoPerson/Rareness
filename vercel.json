@@ -1,8 +1,4 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "rootDirectory": "web",
-  "framework": "vite",
   "cleanUrls": true,
   "rewrites": [
     {
