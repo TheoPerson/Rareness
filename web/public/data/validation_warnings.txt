@@ -1,0 +1,3 @@
+Missing local asset: Fiddlesticks_27_Star_Nemesis_Fiddlesticks.jpg (using CDN fallback)
+Missing local asset: Fiddlesticks_37_Blood_Moon_Fiddlesticks.jpg (using CDN fallback)
+Missing local asset: Fiddlesticks_46_Flora_Fatalis_Fiddlesticks.jpg (using CDN fallback)

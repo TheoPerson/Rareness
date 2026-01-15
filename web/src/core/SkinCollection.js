@@ -25,8 +25,30 @@ export class SkinCollection {
     // Initialize Helpers
     this.skinCardV = new SkinCard(this.favorites);
     this.modal = new Modal(this.favorites, (id) => this.toggleFavorite(id));
+    
+    // Create debounced filter function (150ms delay)
+    this.debouncedApplyFilters = this.debounce(() => this.applyFilters(), 150);
 
     this.initialize();
+  }
+  
+  /**
+   * Debounce utility - delays function execution until after wait period
+   * Prevents performance issues when filtering 2,041 items on every keystroke
+   * @param {Function} func - Function to debounce
+   * @param {number} wait - Delay in milliseconds
+   * @returns {Function} Debounced function
+   */
+  debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func.apply(this, args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
   }
 
   async initialize() {
@@ -87,20 +109,22 @@ export class SkinCollection {
     const heroBrowseBtn = document.getElementById("heroBrowseBtn");
     if(heroBrowseBtn) heroBrowseBtn.addEventListener("click", () => this.loadAndShowBrowse());
     
-    // Search
+    // Search (with debouncing for performance)
     const searchInput = document.getElementById("searchInput");
     const clearSearch = document.getElementById("clearSearch");
 
     searchInput.addEventListener("input", (e) => {
       this.searchQuery = e.target.value.toLowerCase();
       clearSearch.style.display = this.searchQuery ? "block" : "none";
-      this.applyFilters();
+      // Use debounced version to prevent lag when typing (150ms delay)
+      this.debouncedApplyFilters();
     });
 
     clearSearch.addEventListener("click", () => {
       searchInput.value = "";
       this.searchQuery = "";
       clearSearch.style.display = "none";
+      // Immediate filter on clear (no debounce needed)
       this.applyFilters();
     });
 

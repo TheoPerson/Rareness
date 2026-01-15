@@ -4,76 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rareness - Ultimate League of Legends Skin Collection</title>
-    <link rel="stylesheet" href="/styles/main.css">
-    
-    <!-- Performance Monitoring (Audit Injection) -->
-    <script>
-      (function () {
-        window.auditMetrics = {
-          lcp: 0,
-          cls: 0,
-          longTasks: 0,
-          longTaskTotalDuration: 0,
-        };
-
-        // LCP
-        new PerformanceObserver((entryList) => {
-          for (const entry of entryList.getEntries()) {
-            if (entry.startTime > window.auditMetrics.lcp) {
-              window.auditMetrics.lcp = entry.startTime;
-              console.log(
-                "[Audit] LCP Candidate:",
-                Math.round(entry.startTime),
-                "ms"
-              );
-            }
-          }
-        }).observe({ type: "largest-contentful-paint", buffered: true });
-
-        // CLS
-        new PerformanceObserver((entryList) => {
-          for (const entry of entryList.getEntries()) {
-            if (!entry.hadRecentInput) {
-              window.auditMetrics.cls += entry.value;
-              console.log(
-                "[Audit] CLS Update:",
-                window.auditMetrics.cls.toFixed(4)
-              );
-            }
-          }
-        }).observe({ type: "layout-shift", buffered: true });
-
-        // Long Tasks
-        new PerformanceObserver((entryList) => {
-          for (const entry of entryList.getEntries()) {
-            window.auditMetrics.longTasks++;
-            window.auditMetrics.longTaskTotalDuration += entry.duration;
-            console.log(`[Audit] Long Task: ${Math.round(entry.duration)}ms`);
-          }
-        }).observe({ type: "longtask", buffered: true });
-
-        // DOM Content Loaded & Load
-        window.addEventListener("load", () => {
-          setTimeout(() => {
-            const perf = performance.getEntriesByType("navigation")[0];
-            console.log(
-              "[Audit] DOMContentLoaded:",
-              Math.round(perf.domContentLoadedEventEnd),
-              "ms"
-            );
-            console.log(
-              "[Audit] Load Complete:",
-              Math.round(perf.loadEventEnd),
-              "ms"
-            );
-            console.log(
-              "[Audit] DOM Nodes:",
-              document.getElementsByTagName("*").length
-            );
-          }, 0);
-        });
-      })();
-    </script>
+    <link rel="stylesheet" href="/styles/main.css" />
 
     <!-- SEO & Metadata -->
     <meta
@@ -131,12 +62,8 @@
     />
 
     <!-- Icons -->
-    <link
-      rel="icon"
-      type="image/png"
-      href="https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/1.png"
-      style="border-radius: 50%"
-    />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" href="/assets/logo.png" />
 
     <!-- Schema.org JSON-LD -->
     <script type="application/ld+json">
@@ -155,8 +82,9 @@
         }
       }
     </script>
-    <script type="module" crossorigin src="/assets/index-Cjjs7tP1.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-BP1obikC.css">
+    <script type="module" crossorigin src="/assets/js/index-ByXyU8aF.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/js/vercel-insights-BP3KXQRc.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-Bxi7uLrg.css">
   </head>
   <body>
     <div id="app">
@@ -180,11 +108,10 @@
         <div class="container header-content">
           <a class="logo" onclick="location.reload()">
             <img
-              src="https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/1.png"
-              alt="Logo"
+              src="/assets/logo.png"
+              alt="Rareness Logo"
               width="40"
               height="40"
-              style="border-radius: 50%"
             />
             <h1>RARENESS</h1>
           </a>

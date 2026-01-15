@@ -142,6 +142,15 @@ export class Modal {
         const dateRow = document.getElementById("modalReleaseDateRow");
         if (!dateRow) return;
 
+        // Use pre-loaded date if available
+        if (skin.release_date && skin.release_date !== "2000-01-01") {
+             const d = new Date(skin.release_date);
+             const dateStr = d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+             document.getElementById("modalReleaseDate").textContent = dateStr;
+             dateRow.style.display = "flex";
+             return;
+        }
+
         document.getElementById("modalReleaseDate").textContent = "Loading date...";
         dateRow.style.display = "flex";
 

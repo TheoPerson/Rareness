@@ -1,6 +1,8 @@
+<div align="center">
+  <img src="web/public/assets/logo.png" alt="Rareness Logo" width="120" />
+</div>
+
 # 🎮 League of Legends - Complete Skin Collection Project
-
-
 
 ### **Modern Web Application**
 
@@ -289,20 +291,21 @@ This project is for **personal use only**. Do not redistribute Riot's assets com
 
 **Images not loading?**
 
-   - Check `assets/splash/` folder exists
-   - Verify file paths in browser DevTools
-   - Use local server (not direct file open)
+- Check `assets/splash/` folder exists
+- Verify file paths in browser DevTools
+- Use local server (not direct file open)
 
-   **Data not loading?**
+**Data not loading?**
 
-   - Ensure `data/skins_all.csv` exists
-   - Check browser console for errors
-   - Try refreshing the page
+- Ensure `data/skins_all.csv` exists
+- Check browser console for errors
+- Try refreshing the page
 
-   **Slow performance?**
-   - Clear browser cache
-   - Close other tabs
-   - Check image file sizes
+**Slow performance?**
+
+- Clear browser cache
+- Close other tabs
+- Check image file sizes
 
 ### Getting Help
 

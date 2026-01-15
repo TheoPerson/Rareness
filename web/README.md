@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="public/assets/logo.png" alt="Rareness Logo" width="120" />
+</div>
+
 # 🎮 League of Legends Skin Collection - Web App
 
 A beautiful, modern web application to browse and explore all League of Legends skins.

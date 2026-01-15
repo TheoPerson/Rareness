@@ -3,153 +3,206 @@ import json
 import csv
 import os
 from datetime import datetime
+from pathlib import Path
 
-# Dossier de sortie
-# Web App Data Directory
-BASE_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "web", "public", "data")
+# Configuration
+SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.join(os.path.dirname(SCRIPTS_DIR), "web", "public", "data")
+ASSETS_DIR = os.path.join(os.path.dirname(SCRIPTS_DIR), "web", "public", "assets", "splash")
+RELEASE_DATES_FILE = os.path.join(SCRIPTS_DIR, "release_dates_final.json")
+SPECIAL_PRICES_FILE = os.path.join(SCRIPTS_DIR, "special_skin_prices.json")
+
 os.makedirs(BASE_DIR, exist_ok=True)
 
-session = requests.Session()
-
-def get_json(url):
-    return session.get(url, timeout=10).json()
-
-print("🔎 Récupération de la version LoL...")
-PATCH = get_json(
-    "https://ddragon.leagueoflegends.com/api/versions.json"
-)[0]
-
-print(f"📦 Patch utilisé : {PATCH}")
-
-print("📜 Récupération de la liste des champions...")
-champions = get_json(
-    f"https://ddragon.leagueoflegends.com/cdn/{PATCH}/data/en_US/champion.json"
-)["data"]
-
-# Fetch Meraki Analytics Data for Prices and Dates
-# Fetch Meraki Analytics Data for Prices and Dates
-print("💰 Récupération des données Meraki Analytics (Prix & Dates)...")
-meraki_index = {}
-
-# 1. Fallback: Load from existing CSV first (if exists)
-csv_path = os.path.join(BASE_DIR, "skins_all.csv")
-if os.path.exists(csv_path):
-    try:
-        with open(csv_path, "r", encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                s_id = row.get("skin_id")
-                if s_id:
-                    meraki_index[s_id] = {
-                        "cost": row.get("price", 0),
-                        "release": row.get("release_date", "")
-                    }
-        print(f"   📂 Chargé {len(meraki_index)} prix depuis le CSV local (fallback)")
-    except Exception as e:
-        print(f"   ⚠️ Impossible de lire le CSV local: {e}")
-
-# 2. Try Online Fetch
+# Get latest patch
+print("🔍 Fetching latest patch version...")
 try:
-    meraki_data = get_json("https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/skins.json")
-    # Indexer par ID pour recherche rapide
-    online_index = {str(skin["id"]): skin for skin in meraki_data.values()}
-    if online_index:
-        meraki_index = online_index # Overwrite with fresh data if successful
-        print(f"   ✅ {len(meraki_index)} skins trouvés chez Meraki (Actualisé)")
+    PATCH = requests.get("https://ddragon.leagueoflegends.com/api/versions.json", timeout=10).json()[0]
+    print(f"✅ Using patch: {PATCH}")
 except Exception as e:
-    print(f"   ⚠️ Erreur Meraki (Utilisation du cache CSV si diponible): {e}")
+    PATCH = "16.1.1"
+    print(f"⚠️  Using fallback patch: {PATCH}")
 
-# Helper Functions
-def sanitize_filename(name):
-    if not name: return ""
-    return name.replace("/", "-").replace(":", "-").replace("'", "").replace(" ", "_")
+# Load release dates
+print(f"📅 Loading release dates...")
+release_dates_map = {}
+if os.path.exists(RELEASE_DATES_FILE):
+    with open(RELEASE_DATES_FILE, "r", encoding="utf-8") as f:
+        release_dates_map = json.load(f)
+    print(f"✅ Loaded {len(release_dates_map)} release dates")
+else:
+    print(f"⚠️  No release dates file found")
 
-def is_esports_skin(skin_name):
-    if not skin_name: return False
-    esports_teams = ["T1", "DRX", "SKT", "SSG", "FPX", "iG", "DWG", "EDG", "Fnatic", "TPA"]
-    return any(team in skin_name for team in esports_teams)
+# Load special skin prices (Mythic, Prestige, Victorious, etc.)
+print(f"💎 Loading special skin prices...")
+special_prices = {}
+if os.path.exists(SPECIAL_PRICES_FILE):
+    with open(SPECIAL_PRICES_FILE, "r", encoding="utf-8") as f:
+        special_list = json.load(f)
+        # Convert to lookup dict
+        for entry in special_list:
+            key = f"{entry['champion']}:{entry['skin']}"
+            special_prices[key] = {"price": entry["price_rp"], "status": entry["status"]}
+    print(f"✅ Loaded {len(special_prices)} special skin prices")
+else:
+    print(f"⚠️  No special prices file found")
 
-# Processing
+# Fetch champion list
+print("📥 Fetching champion list...")
+champions_url = f"https://ddragon.leagueoflegends.com/cdn/{PATCH}/data/en_US/champion.json"
+champions = requests.get(champions_url, timeout=15).json()["data"]
+print(f"✅ Found {len(champions)} champions")
+
+# Fetch Meraki Analytics Data for Prices and Dates
+print("💰 Fetching Meraki Analytics data (Prices & Dates)...")
+try:
+    meraki_url = "https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions.json"
+    meraki_data = requests.get(meraki_url, timeout=20).json()
+    print(f"✅ Meraki data loaded")
+except Exception as e:
+    print(f"⚠️  Meraki Analytics not available: {e}")
+    meraki_data = {}
+
+# Process all champions and skins
 skins = []
+validation_warnings = []
 
 for champ_name, champ_data in champions.items():
-    print(f"➡️  {champ_name}")
-    try:
-        champ_json = get_json(
-            f"https://ddragon.leagueoflegends.com/cdn/{PATCH}/data/en_US/champion/{champ_name}.json"
-        )["data"][champ_name]
-    except Exception as e:
-        print(f"Failed to fetch {champ_name}: {e}")
-        continue
-
+    print(f"⚙️  {champ_name}")
+    
+    # Fetch detailed champion data
+    champ_json_url = f"https://ddragon.leagueoflegends.com/cdn/{PATCH}/data/en_US/champion/{champ_name}.json"
+    champ_json = requests.get(champ_json_url, timeout=10).json()["data"][champ_name]
+    
+    # Build Meraki index for fast lookup
+    meraki_champ = meraki_data.get(champ_name, {})
+    meraki_skins = meraki_champ.get("skins", [])
+    meraki_index = {str(skin["id"]): skin for skin in meraki_skins}
+    
     for skin in champ_json["skins"]:
         skin_id = str(skin["id"])
+        skin_num = skin["num"]
+        skin_name = skin["name"]
+        
+        # Skip default skins
+        if skin_name == "default":
+            continue
+        
+        # Get Meraki info
         meraki_info = meraki_index.get(skin_id, {})
         
-        # Price Logic
-        price = 0
-        raw_price = meraki_info.get("cost", 0)
-        if raw_price == "special": 
-            price = 0
+        # === PRICE LOGIC ===
+        # Priority: Special Prices DB > Meraki Analytics > Default
+        price = None
+        
+        # 1. Check special prices database (Prestige, Victorious, Hextech, etc.)
+        special_key = f"{champ_name}:{skin_name}"
+        if special_key in special_prices:
+            price_info = special_prices[special_key]
+            price = price_info["price"] if price_info["price"] > 0 else None
+        # 2. Check Meraki as fallback
+        elif meraki_info:
+            price = meraki_info.get("cost", 1350)
+            if price == "special" or price == "Special":
+                price = None
+        # 3. Default
         else:
-            try:
-                price = int(raw_price)
-            except:
-                price = 0
+            price = 1350
         
-        release_date = meraki_info.get("release", "")
-
-        # Name Normalization
-        original_name = skin["name"]
-        display_name = original_name
-        if display_name == "default":
-            display_name = f"Original {champ_name}"
-
-        # Computed Properties
-        is_chroma = (skin.get("chromas") == True) # Python True boolean
-        is_prestige = "prestige" in display_name.lower()
-        is_esports = is_esports_skin(display_name)
+        # Override for Prestige skins (if not in special DB)
+        if "Prestige" in skin_name and price is None:
+            price = None  # Keep as None (no RP price)
         
-        # Image Path
-        # Format: /assets/splash/{Champion}_{SkinNum}_{SanitizedName}.jpg
-        # Careful: DataManager used skin.skin_num which is an int, make sure to str it
-        sanitized_name = sanitize_filename(original_name)
-        image_path = f"/assets/splash/{champ_name}_{skin['num']}_{sanitized_name}.jpg"
-
-        skins.append({
+        # === RELEASE DATE LOGIC ===
+        release_date = ""
+        
+        # Curated release dates take priority (more reliable)
+        key1 = f"{champ_name}:{skin_name}"
+        clean_name = skin_name.replace(champ_name, "").strip()
+        key2 = f"{champ_name}:{clean_name}"
+        
+        if key1 in release_dates_map:
+            release_date = release_dates_map[key1]
+        elif key2 in release_dates_map:
+            release_date = release_dates_map[key2]
+        elif meraki_info and "release" in meraki_info:
+            # Use Meraki as fallback, but validate it
+            meraki_date = meraki_info["release"]
+            # Filter out placeholder future dates (Meraki uses "2025-03-05" for unreleased skins)
+            if meraki_date and meraki_date not in ["2025-03-05", "2026-01-01", "2099-12-31"]:
+                release_date = meraki_date
+        
+        # === IMAGE PATH LOGIC ===
+        # Use local assets if available, fallback to CDN
+        safe_name = skin_name.replace("/", "-").replace(":", "").replace(" ", "_").replace("'", "")
+        local_filename = f"{champ_name}_{skin_num}_{safe_name}.jpg"
+        local_path = Path(ASSETS_DIR) / local_filename
+        
+        if local_path.exists():
+            image_path = f"/assets/splash/{local_filename}"
+        else:
+            # Fallback to CDN
+            image_path = f"https://ddragon.leagueoflegends.com/cdn/img/champion/loading/{champ_name}_{skin_num}.jpg"
+            validation_warnings.append(f"Missing local asset: {local_filename} (using CDN fallback)")
+        
+        # === BUILD SKIN ENTRY ===
+        skin_entry = {
             "champion": champ_name,
             "champion_id": champ_data["key"],
             "skin_id": skin["id"],
-            "skin_num": skin["num"],
-            "skin_name": display_name,         # Normalized name
-            "chromas": str(skin.get("chromas")), # Keep string for CSV compat if needed, but JSON prefers bool
-            "isChroma": is_chroma,             # Pre-computed
-            "isPrestige": is_prestige,         # Pre-computed
-            "isEsports": is_esports,           # Pre-computed
+            "skin_num": skin_num,
+            "skin_name": skin_name,
+            "chromas": skin.get("chromas", False),
             "price": price,
             "release_date": release_date,
-            "imagePath": image_path,           # Pre-computed
+            "imagePath": image_path,
+            "splashPath": f"https://ddragon.leagueoflegends.com/cdn/img/champion/splash/{champ_name}_{skin_num}.jpg",
+            "loadingPath": f"https://ddragon.leagueoflegends.com/cdn/img/champion/loading/{champ_name}_{skin_num}.jpg",
+            "isEsports": any(team in skin_name for team in ["T1", "DRX", "EDG", "DWG", "FPX", "IG", "SSG", "SKT T1", "TPA", "Fnatic"]),
+            "isPrestige": "Prestige" in skin_name,
+            "isChroma": False,  # Individual chromas not tracked
             "patch": PATCH
-        })
+        }
+        
+        skins.append(skin_entry)
 
-# JSON Export
+# === SAVE OUTPUT ===
+print(f"\n💾 Saving data...")
+
+# JSON
 with open(f"{BASE_DIR}/skins_all.json", "w", encoding="utf-8") as f:
     json.dump(skins, f, indent=2, ensure_ascii=False)
+print(f"✅ JSON: {BASE_DIR}/skins_all.json")
 
 # CSV
-with open(f"{BASE_DIR}/skins_all.csv", "w", newline="", encoding="utf-8") as f:
-    writer = csv.DictWriter(f, fieldnames=skins[0].keys())
-    writer.writeheader()
-    writer.writerows(skins)
+if skins:
+    with open(f"{BASE_DIR}/skins_all.csv", "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=skins[0].keys())
+        writer.writeheader()
+        writer.writerows(skins)
+    print(f"✅ CSV: {BASE_DIR}/skins_all.csv")
 
 # Meta
 meta = {
     "exported_at": datetime.utcnow().isoformat() + "Z",
     "patch": PATCH,
-    "total_skins": len(skins)
+    "total_skins": len(skins),
+    "validation_warnings": len(validation_warnings)
 }
 
 with open(f"{BASE_DIR}/meta.json", "w", encoding="utf-8") as f:
     json.dump(meta, f, indent=2)
+print(f"✅ Metadata: {BASE_DIR}/meta.json")
 
-print(f"✅ EXPORT TERMINÉ : {len(skins)} skins")
+# Save validation warnings
+if validation_warnings:
+    with open(f"{BASE_DIR}/validation_warnings.txt", "w", encoding="utf-8") as f:
+        f.write("\n".join(validation_warnings))
+    print(f"⚠️  {len(validation_warnings)} validation warnings saved")
+
+print(f"\n{'='*70}")
+print(f"✅ EXPORT COMPLETE: {len(skins)} skins exported")
+print(f"   - With prices: {sum(1 for s in skins if s['price'] is not None)}")
+print(f"   - With release dates: {sum(1 for s in skins if s['release_date'])}")
+print(f"   - Using local assets: {sum(1 for s in skins if '/assets/' in s['imagePath'])}")
+print(f"{'='*70}\n")
